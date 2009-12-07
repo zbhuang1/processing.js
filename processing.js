@@ -439,7 +439,7 @@
     }
 
   
-    
+    //testing merge?
     p.append = function( array, element ){
       array[ array.length ] = element;
       return array;
