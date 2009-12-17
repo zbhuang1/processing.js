@@ -1475,6 +1475,218 @@
     }
     // End of PVector operations
     
+      p.PMatrix3D = function PMatrix3D() {
+  
+    if (arguments.length == 0) {
+      reset();
+    } else {
+      set(arguments);
+    }
+  
+    this.set = function set( ) {
+      if ( arguments.length == 1 ) {
+        /*if (arguments[0] instanceof PMatrix2D) {
+          var src = arguments[0];
+          set ( src.m00, src.m01, 0,       src.m02,
+                src.m10, src.m11, 0,       src.m12,
+                0,       0,       1,       0,
+                0,       0,       0,       1 );
+        } else*/ if (arguments[0] instanceof PMatrix3D) {
+          var src = arguments[0];
+          set ( src.m00, src.m01, src.m02, src.m03,
+                src.m10, src.m11, src.m12, src.m13,
+                src.m20, src.m21, src.m22, src.m23,
+                src.m30, src.m31, src.m32, src.m33 );
+        } else if (arguments[0] instanceof Array) {
+          if (arguments[0].length == 6) {
+            var src = arguments[0];
+            set ( src[0], src[1], src[2],
+                  src[3], src[4], src[5] );
+          } else if (arguments[0].length == 16) {
+            var src = arguments[0];
+            set ( src[0],  src[1],  src[2],  src[3],
+                  src[4],  src[5],  src[6],  src[7],
+                  src[8],  src[9],  src[10], src[11],
+                  src[12], src[13], src[14], src[15] );
+          }
+        }
+      } else if ( arguments.length == 6 ) {
+        set ( arguments[0], arguments[1], 0, arguments[2],
+              arguments[3], arguments[4], 0, arguments[5],
+              0,            0,            1, 0,
+              0,            0,            0, 1 );
+      } else if ( arguments.length == 16 ) {
+        this.m00 = arguments[0];  this.m01 = arguments[1];  this.m02 = arguments[2];  this.m03 = arguments[3];
+        this.m10 = arguments[4];  this.m11 = arguments[5];  this.m12 = arguments[6];  this.m13 = arguments[7];
+        this.m20 = arguments[8];  this.m21 = arguments[9];  this.m22 = arguments[10]; this.m23 = arguments[11];
+        this.m30 = arguments[12]; this.m31 = arguments[13]; this.m32 = arguments[14]; this.m33 = arguments[15];
+      }
+    };
+    
+    this.reset = function reset( ) {
+      set( 1, 0, 0, 0,
+           0, 1, 0, 0,
+           0, 0, 1, 0,
+           0, 0, 0, 1 );
+    };
+    
+    this.translate = function translate() {
+      if (arguments.length == 2) {
+        translate(arguments[0], arguments[1], 0);
+      } else if (arguments.length == 3) {
+        m03 += arguments[0] * m00 + arguments[1] * m01 + arguments[2] * m02;
+        m13 += arguments[0] * m10 + arguments[1] * m11 + arguments[2] * m12;
+        m23 += arguments[0] * m20 + arguments[1] * m21 + arguments[2] * m22;
+        m33 += arguments[0] * m30 + arguments[1] * m31 + arguments[2] * m32;
+      }
+    };
+    
+    this.rotate = function rotate() {
+      if ( arguments.length == 1 ) {
+        rotateZ(arguments[0]);
+      } else if ( arguments.length == 4 ) {
+        var c = cos(arguments[0]);
+        var s = sin(arguments[0]);
+        var t = 1 - c;
+
+        apply((t * arguments[1] * arguments[1]) + c, (t * arguments[1] * arguments[2]) - (s * arguments[3]),
+          (t * arguments[1] * arguments[3]) + (s * arguments[2]), 0, (t * arguments[1] * arguments[2]) + (s * arguments[3]),
+          (t * arguments[2] * arguments[2]) + c, (t * arguments[2] * arguments[3]) - (s * arguments[1]), 0,
+          (t * arguments[1] * arguments[3]) - (s * arguments[2]), (t * arguments[2] * arguments[3]) + (s * arguments[1]),
+          (t * arguments[3] * arguments[3]) + c, 0, 0, 0, 0, 1);
+      }
+    };
+    
+    this.rotateX = function rotateX(angle) {
+      var c = cos(angle);
+      var s = sin(angle);
+      apply(1, 0, 0, 0,  0, c, -s, 0,  0, s, c, 0,  0, 0, 0, 1);
+    };
+    
+    this.rotateY = function rotateY(angle) {
+      var c = cos(angle);
+      var s = sin(angle);
+      apply(c, 0, s, 0,  0, 1, 0, 0,  -s, 0, c, 0,  0, 0, 0, 1);
+    };
+    
+    this.rotateZ = function rotateZ(angle) {
+      var c = cos(angle);
+      var s = sin(angle);
+      apply(c, -s, 0, 0,  s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
+    };
+    
+    this.scale = function scale(sx, sy, sz) {
+      if (sx && !sy && !sz) {
+        sy = sz = sx;
+      } else if (sx && sy && !sz) {
+        sz = 1;
+      }
+      if (sx && sy && sz) {
+        m00 *= sx;  m01 *= sy;  m02 *= sz;
+        m10 *= sx;  m11 *= sy;  m12 *= sz;
+        m20 *= sx;  m21 *= sy;  m22 *= sz;
+        m30 *= sx;  m31 *= sy;  m32 *= sz;
+      }
+    };
+    
+    this.skewX = function skewX(angle) {
+      var t = Math.tan(angle);
+      apply(1, t, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+    };
+    
+    this.skewY = function skewY(angle) {
+      var t = Math.tan(angle);
+      apply(1, 0, 0, 0,
+            t, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+    };
+    
+    this.apply = function apply() {
+      if (arguments.length == 1) {
+        if (arguments[0] instanceof PMatrix2D) {
+          apply(arguments[0].m00, arguments[0].m01, 0, arguments[0].m02,
+                arguments[0].m10, arguments[0].m11, 0, arguments[0].m12,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+        } else if (arguments[0] instanceof PMatrix3D) {
+          apply(arguments[0].m00, arguments[0].m01, arguments[0].m02, arguments[0].m03,
+                arguments[0].m10, arguments[0].m11, arguments[0].m12, arguments[0].m13,
+                arguments[0].m20, arguments[0].m21, arguments[0].m22, arguments[0].m23,
+                arguments[0].m30, arguments[0].m31, arguments[0].m32, arguments[0].m33);
+        }
+      } else if (arguments.length == 6) {
+        apply(arguments[0], arguments[1], 0, arguments[2],
+              arguments[3], arguments[4], 0, arguments[5],
+              0, 0, 1, 0,
+              0, 0, 0, 1);
+      } else if (arguments.length == 16) {
+        var n00 = arguments[0];  var n01 = arguments[1];  var n02 = arguments[2];  var n03 = arguments[3];
+        var n10 = arguments[4];  var n11 = arguments[5];  var n12 = arguments[6];  var n13 = arguments[7];
+        var n20 = arguments[8];  var n21 = arguments[9];  var n22 = arguments[10]; var n23 = arguments[11];
+        var n30 = arguments[12]; var n31 = arguments[13]; var n32 = arguments[14]; var n33 = arguments[15];
+        
+        var r00 = m00 * n00 + m01 * n10 + m02 * n20 + m03 * n30;
+        var r01 = m00 * n01 + m01 * n11 + m02 * n21 + m03 * n31;
+        var r02 = m00 * n02 + m01 * n12 + m02 * n22 + m03 * n32;
+        var r03 = m00 * n03 + m01 * n13 + m02 * n23 + m03 * n33;
+
+        var r10 = m10 * n00 + m11 * n10 + m12 * n20 + m13 * n30;
+        var r11 = m10 * n01 + m11 * n11 + m12 * n21 + m13 * n31;
+        var r12 = m10 * n02 + m11 * n12 + m12 * n22 + m13 * n32;
+        var r13 = m10 * n03 + m11 * n13 + m12 * n23 + m13 * n33;
+
+        var r20 = m20 * n00 + m21 * n10 + m22 * n20 + m23 * n30;
+        var r21 = m20 * n01 + m21 * n11 + m22 * n21 + m23 * n31;
+        var r22 = m20 * n02 + m21 * n12 + m22 * n22 + m23 * n32;
+        var r23 = m20 * n03 + m21 * n13 + m22 * n23 + m23 * n33;
+
+        var r30 = m30 * n00 + m31 * n10 + m32 * n20 + m33 * n30;
+        var r31 = m30 * n01 + m31 * n11 + m32 * n21 + m33 * n31;
+        var r32 = m30 * n02 + m31 * n12 + m32 * n22 + m33 * n32;
+        var r33 = m30 * n03 + m31 * n13 + m32 * n23 + m33 * n33;
+
+        m00 = r00; m01 = r01; m02 = r02; m03 = r03;
+        m10 = r10; m11 = r11; m12 = r12; m13 = r13;
+        m20 = r20; m21 = r21; m22 = r22; m23 = r23;
+        m30 = r30; m31 = r31; m32 = r32; m33 = r33;
+      }
+    };
+    
+    this.preApply = function preApply() {
+      apply(arguments);
+    };
+    
+    this.transpose = function transpose() {
+      var temp;
+      temp = m01; m01 = m10; m10 = temp;
+      temp = m02; m02 = m20; m20 = temp;
+      temp = m03; m03 = m30; m30 = temp;
+      temp = m12; m12 = m21; m21 = temp;
+      temp = m13; m13 = m31; m31 = temp;
+      temp = m23; m23 = m32; m32 = temp;
+    };
+    
+    var max = function max(a, b) {
+      return (a > b) ? a : b;
+    };
+
+    var abs = function abs(a) {
+      return (a < 0) ? -a : a;
+    };
+
+    var sin = function sin(angle) {
+      return Math.sin(angle);
+    };
+
+    var cos = function cos(angle) {
+      return Math.cos(angle);
+    };
+    
+  };
 
     
     ////////////////////////////////////////////////////////////////////////////
