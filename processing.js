@@ -1475,345 +1475,345 @@
     }
     // End of PVector operations
     
-      p.PMatrix3D = function PMatrix3D() {
-  
-    if (arguments.length == 0) {
-      reset();
-    } else {
-      set(arguments);
-    }
-  
-    this.set = function set( ) {
-      if ( arguments.length == 1 ) {
-        /*if (arguments[0] instanceof PMatrix2D) {
-          var src = arguments[0];
-          set ( src.m00, src.m01, 0,       src.m02,
-                src.m10, src.m11, 0,       src.m12,
-                0,       0,       1,       0,
-                0,       0,       0,       1 );
-        } else*/ if (arguments[0] instanceof PMatrix3D) {
-          var src = arguments[0];
-          set ( src.m00, src.m01, src.m02, src.m03,
-                src.m10, src.m11, src.m12, src.m13,
-                src.m20, src.m21, src.m22, src.m23,
-                src.m30, src.m31, src.m32, src.m33 );
-        } else if (arguments[0] instanceof Array) {
-          if (arguments[0].length == 6) {
-            var src = arguments[0];
-            set ( src[0], src[1], src[2],
-                  src[3], src[4], src[5] );
-          } else if (arguments[0].length == 16) {
-            var src = arguments[0];
-            set ( src[0],  src[1],  src[2],  src[3],
-                  src[4],  src[5],  src[6],  src[7],
-                  src[8],  src[9],  src[10], src[11],
-                  src[12], src[13], src[14], src[15] );
-          }
-        }
-      } else if ( arguments.length == 6 ) {
-        set ( arguments[0], arguments[1], 0, arguments[2],
-              arguments[3], arguments[4], 0, arguments[5],
-              0,            0,            1, 0,
-              0,            0,            0, 1 );
-      } else if ( arguments.length == 16 ) {
-        this.m00 = arguments[0];  this.m01 = arguments[1];  this.m02 = arguments[2];  this.m03 = arguments[3];
-        this.m10 = arguments[4];  this.m11 = arguments[5];  this.m12 = arguments[6];  this.m13 = arguments[7];
-        this.m20 = arguments[8];  this.m21 = arguments[9];  this.m22 = arguments[10]; this.m23 = arguments[11];
-        this.m30 = arguments[12]; this.m31 = arguments[13]; this.m32 = arguments[14]; this.m33 = arguments[15];
-      }
-    };
-    
-    this.reset = function reset( ) {
-      set( 1, 0, 0, 0,
-           0, 1, 0, 0,
-           0, 0, 1, 0,
-           0, 0, 0, 1 );
-    };
-    
-    this.translate = function translate() {
-      if (arguments.length == 2) {
-        translate(arguments[0], arguments[1], 0);
-      } else if (arguments.length == 3) {
-        m03 += arguments[0] * m00 + arguments[1] * m01 + arguments[2] * m02;
-        m13 += arguments[0] * m10 + arguments[1] * m11 + arguments[2] * m12;
-        m23 += arguments[0] * m20 + arguments[1] * m21 + arguments[2] * m22;
-        m33 += arguments[0] * m30 + arguments[1] * m31 + arguments[2] * m32;
-      }
-    };
-    
-    this.rotate = function rotate() {
-      if ( arguments.length == 1 ) {
-        rotateZ(arguments[0]);
-      } else if ( arguments.length == 4 ) {
-        var c = cos(arguments[0]);
-        var s = sin(arguments[0]);
-        var t = 1 - c;
+    p.PMatrix3D = function PMatrix3D() {
 
-        apply((t * arguments[1] * arguments[1]) + c, (t * arguments[1] * arguments[2]) - (s * arguments[3]),
-          (t * arguments[1] * arguments[3]) + (s * arguments[2]), 0, (t * arguments[1] * arguments[2]) + (s * arguments[3]),
-          (t * arguments[2] * arguments[2]) + c, (t * arguments[2] * arguments[3]) - (s * arguments[1]), 0,
-          (t * arguments[1] * arguments[3]) - (s * arguments[2]), (t * arguments[2] * arguments[3]) + (s * arguments[1]),
-          (t * arguments[3] * arguments[3]) + c, 0, 0, 0, 0, 1);
-      }
-    };
+        this.set = function set( ) {
+            if ( arguments.length == 1 ) {
+                /*if (arguments[0] instanceof PMatrix2D) {
+                    var src = arguments[0];
+                    set ( src.m00, src.m01, 0,       src.m02,
+                          src.m10, src.m11, 0,       src.m12,
+                          0,       0,       1,       0,
+                          0,       0,       0,       1 );
+                } else*/ if (arguments[0] instanceof PMatrix3D) {
+                    var src = arguments[0];
+                    set ( src.m00, src.m01, src.m02, src.m03,
+                          src.m10, src.m11, src.m12, src.m13,
+                          src.m20, src.m21, src.m22, src.m23,
+                          src.m30, src.m31, src.m32, src.m33 );
+                } else if (arguments[0] instanceof Array) {
+                    if (arguments[0].length == 6) {
+                        var src = arguments[0];
+                        set ( src[0], src[1], src[2],
+                              src[3], src[4], src[5] );
+                    } else if (arguments[0].length == 16) {
+                        var src = arguments[0];
+                        set ( src[0],  src[1],  src[2],  src[3],
+                              src[4],  src[5],  src[6],  src[7],
+                              src[8],  src[9],  src[10], src[11],
+                              src[12], src[13], src[14], src[15] );
+                    }
+                }
+            } else if ( arguments.length == 6 ) {
+                set ( arguments[0], arguments[1], 0, arguments[2],
+                      arguments[3], arguments[4], 0, arguments[5],
+                      0,            0,            1, 0,
+                      0,            0,            0, 1 );
+            } else if ( arguments.length == 16 ) {
+                this.m00 = arguments[0];  this.m01 = arguments[1];  this.m02 = arguments[2];  this.m03 = arguments[3];
+                this.m10 = arguments[4];  this.m11 = arguments[5];  this.m12 = arguments[6];  this.m13 = arguments[7];
+                this.m20 = arguments[8];  this.m21 = arguments[9];  this.m22 = arguments[10]; this.m23 = arguments[11];
+                this.m30 = arguments[12]; this.m31 = arguments[13]; this.m32 = arguments[14]; this.m33 = arguments[15];
+            }
+        };
     
-    this.rotateX = function rotateX(angle) {
-      var c = cos(angle);
-      var s = sin(angle);
-      apply(1, 0, 0, 0,  0, c, -s, 0,  0, s, c, 0,  0, 0, 0, 1);
-    };
+        this.reset = function reset( ) {
+            this.set( 1, 0, 0, 0,
+                 0, 1, 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1 );
+        };
     
-    this.rotateY = function rotateY(angle) {
-      var c = cos(angle);
-      var s = sin(angle);
-      apply(c, 0, s, 0,  0, 1, 0, 0,  -s, 0, c, 0,  0, 0, 0, 1);
-    };
-    
-    this.rotateZ = function rotateZ(angle) {
-      var c = cos(angle);
-      var s = sin(angle);
-      apply(c, -s, 0, 0,  s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
-    };
-    
-    this.scale = function scale(sx, sy, sz) {
-      if (sx && !sy && !sz) {
-        sy = sz = sx;
-      } else if (sx && sy && !sz) {
-        sz = 1;
-      }
-      if (sx && sy && sz) {
-        m00 *= sx;  m01 *= sy;  m02 *= sz;
-        m10 *= sx;  m11 *= sy;  m12 *= sz;
-        m20 *= sx;  m21 *= sy;  m22 *= sz;
-        m30 *= sx;  m31 *= sy;  m32 *= sz;
-      }
-    };
-    
-    this.skewX = function skewX(angle) {
-      var t = Math.tan(angle);
-      apply(1, t, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1);
-    };
-    
-    this.skewY = function skewY(angle) {
-      var t = Math.tan(angle);
-      apply(1, 0, 0, 0,
-            t, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1);
-    };
-    
-    this.apply = function apply() {
-      if (arguments.length == 1) {
-        if (arguments[0] instanceof PMatrix2D) {
-          apply(arguments[0].m00, arguments[0].m01, 0, arguments[0].m02,
-                arguments[0].m10, arguments[0].m11, 0, arguments[0].m12,
-                0, 0, 1, 0,
-                0, 0, 0, 1);
-        } else if (arguments[0] instanceof PMatrix3D) {
-          apply(arguments[0].m00, arguments[0].m01, arguments[0].m02, arguments[0].m03,
-                arguments[0].m10, arguments[0].m11, arguments[0].m12, arguments[0].m13,
-                arguments[0].m20, arguments[0].m21, arguments[0].m22, arguments[0].m23,
-                arguments[0].m30, arguments[0].m31, arguments[0].m32, arguments[0].m33);
+        if (arguments.length == 0) {
+            this.reset();
+        } else {
+            this.set(arguments);
         }
-      } else if (arguments.length == 6) {
-        apply(arguments[0], arguments[1], 0, arguments[2],
-              arguments[3], arguments[4], 0, arguments[5],
-              0, 0, 1, 0,
-              0, 0, 0, 1);
-      } else if (arguments.length == 16) {
-        var n00 = arguments[0];  var n01 = arguments[1];  var n02 = arguments[2];  var n03 = arguments[3];
-        var n10 = arguments[4];  var n11 = arguments[5];  var n12 = arguments[6];  var n13 = arguments[7];
-        var n20 = arguments[8];  var n21 = arguments[9];  var n22 = arguments[10]; var n23 = arguments[11];
-        var n30 = arguments[12]; var n31 = arguments[13]; var n32 = arguments[14]; var n33 = arguments[15];
+  
+        this.translate = function translate() {
+            if (arguments.length == 2) {
+                translate(arguments[0], arguments[1], 0);
+            } else if (arguments.length == 3) {
+                m03 += arguments[0] * m00 + arguments[1] * m01 + arguments[2] * m02;
+                m13 += arguments[0] * m10 + arguments[1] * m11 + arguments[2] * m12;
+                m23 += arguments[0] * m20 + arguments[1] * m21 + arguments[2] * m22;
+                m33 += arguments[0] * m30 + arguments[1] * m31 + arguments[2] * m32;
+            }
+        };
+    
+        this.rotate = function rotate() {
+            if ( arguments.length == 1 ) {
+                rotateZ(arguments[0]);
+            } else if ( arguments.length == 4 ) {
+                var c = cos(arguments[0]);
+                var s = sin(arguments[0]);
+                var t = 1 - c;
+
+                apply((t * arguments[1] * arguments[1]) + c, (t * arguments[1] * arguments[2]) - (s * arguments[3]),
+                      (t * arguments[1] * arguments[3]) + (s * arguments[2]), 0, (t * arguments[1] * arguments[2]) + (s * arguments[3]),
+                      (t * arguments[2] * arguments[2]) + c, (t * arguments[2] * arguments[3]) - (s * arguments[1]), 0,
+                      (t * arguments[1] * arguments[3]) - (s * arguments[2]), (t * arguments[2] * arguments[3]) + (s * arguments[1]),
+                      (t * arguments[3] * arguments[3]) + c, 0, 0, 0, 0, 1);
+            }
+        };
+    
+        this.rotateX = function rotateX(angle) {
+            var c = cos(angle);
+            var s = sin(angle);
+            apply(1, 0, 0, 0,  0, c, -s, 0,  0, s, c, 0,  0, 0, 0, 1);
+        };
+    
+        this.rotateY = function rotateY(angle) {
+            var c = cos(angle);
+            var s = sin(angle);
+            apply(c, 0, s, 0,  0, 1, 0, 0,  -s, 0, c, 0,  0, 0, 0, 1);
+        };
+    
+        this.rotateZ = function rotateZ(angle) {
+            var c = cos(angle);
+            var s = sin(angle);
+            apply(c, -s, 0, 0,  s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
+        };
+    
+        this.scale = function scale(sx, sy, sz) {
+            if (sx && !sy && !sz) {
+                sy = sz = sx;
+            } else if (sx && sy && !sz) {
+                sz = 1;
+            }
+            if (sx && sy && sz) {
+                m00 *= sx;  m01 *= sy;  m02 *= sz;
+                m10 *= sx;  m11 *= sy;  m12 *= sz;
+                m20 *= sx;  m21 *= sy;  m22 *= sz;
+                m30 *= sx;  m31 *= sy;  m32 *= sz;
+            }
+        };
+    
+        this.skewX = function skewX(angle) {
+            var t = Math.tan(angle);
+            apply(1, t, 0, 0,
+                  0, 1, 0, 0,
+                  0, 0, 1, 0,
+                  0, 0, 0, 1);
+        };
+    
+        this.skewY = function skewY(angle) {
+            var t = Math.tan(angle);
+            apply(1, 0, 0, 0,
+                  t, 1, 0, 0,
+                  0, 0, 1, 0,
+                  0, 0, 0, 1);
+        };
+    
+        this.apply = function apply() {
+            if (arguments.length == 1) {
+                if (arguments[0] instanceof PMatrix2D) {
+                    apply(arguments[0].m00, arguments[0].m01, 0, arguments[0].m02,
+                          arguments[0].m10, arguments[0].m11, 0, arguments[0].m12,
+                          0, 0, 1, 0,
+                          0, 0, 0, 1);
+                } else if (arguments[0] instanceof PMatrix3D) {
+                    apply(arguments[0].m00, arguments[0].m01, arguments[0].m02, arguments[0].m03,
+                          arguments[0].m10, arguments[0].m11, arguments[0].m12, arguments[0].m13,
+                          arguments[0].m20, arguments[0].m21, arguments[0].m22, arguments[0].m23,
+                          arguments[0].m30, arguments[0].m31, arguments[0].m32, arguments[0].m33);
+                }
+            } else if (arguments.length == 6) {
+                apply(arguments[0], arguments[1], 0, arguments[2],
+                      arguments[3], arguments[4], 0, arguments[5],
+                      0, 0, 1, 0,
+                      0, 0, 0, 1);
+            } else if (arguments.length == 16) {
+                var n00 = arguments[0];  var n01 = arguments[1];  var n02 = arguments[2];  var n03 = arguments[3];
+                var n10 = arguments[4];  var n11 = arguments[5];  var n12 = arguments[6];  var n13 = arguments[7];
+                var n20 = arguments[8];  var n21 = arguments[9];  var n22 = arguments[10]; var n23 = arguments[11];
+                var n30 = arguments[12]; var n31 = arguments[13]; var n32 = arguments[14]; var n33 = arguments[15];
         
-        var r00 = m00 * n00 + m01 * n10 + m02 * n20 + m03 * n30;
-        var r01 = m00 * n01 + m01 * n11 + m02 * n21 + m03 * n31;
-        var r02 = m00 * n02 + m01 * n12 + m02 * n22 + m03 * n32;
-        var r03 = m00 * n03 + m01 * n13 + m02 * n23 + m03 * n33;
+                var r00 = m00 * n00 + m01 * n10 + m02 * n20 + m03 * n30;
+                var r01 = m00 * n01 + m01 * n11 + m02 * n21 + m03 * n31;
+                var r02 = m00 * n02 + m01 * n12 + m02 * n22 + m03 * n32;
+                var r03 = m00 * n03 + m01 * n13 + m02 * n23 + m03 * n33;
 
-        var r10 = m10 * n00 + m11 * n10 + m12 * n20 + m13 * n30;
-        var r11 = m10 * n01 + m11 * n11 + m12 * n21 + m13 * n31;
-        var r12 = m10 * n02 + m11 * n12 + m12 * n22 + m13 * n32;
-        var r13 = m10 * n03 + m11 * n13 + m12 * n23 + m13 * n33;
+                var r10 = m10 * n00 + m11 * n10 + m12 * n20 + m13 * n30;
+                var r11 = m10 * n01 + m11 * n11 + m12 * n21 + m13 * n31;
+                var r12 = m10 * n02 + m11 * n12 + m12 * n22 + m13 * n32;
+                var r13 = m10 * n03 + m11 * n13 + m12 * n23 + m13 * n33;
 
-        var r20 = m20 * n00 + m21 * n10 + m22 * n20 + m23 * n30;
-        var r21 = m20 * n01 + m21 * n11 + m22 * n21 + m23 * n31;
-        var r22 = m20 * n02 + m21 * n12 + m22 * n22 + m23 * n32;
-        var r23 = m20 * n03 + m21 * n13 + m22 * n23 + m23 * n33;
+                var r20 = m20 * n00 + m21 * n10 + m22 * n20 + m23 * n30;
+                var r21 = m20 * n01 + m21 * n11 + m22 * n21 + m23 * n31;
+                var r22 = m20 * n02 + m21 * n12 + m22 * n22 + m23 * n32;
+                var r23 = m20 * n03 + m21 * n13 + m22 * n23 + m23 * n33;
 
-        var r30 = m30 * n00 + m31 * n10 + m32 * n20 + m33 * n30;
-        var r31 = m30 * n01 + m31 * n11 + m32 * n21 + m33 * n31;
-        var r32 = m30 * n02 + m31 * n12 + m32 * n22 + m33 * n32;
-        var r33 = m30 * n03 + m31 * n13 + m32 * n23 + m33 * n33;
+                var r30 = m30 * n00 + m31 * n10 + m32 * n20 + m33 * n30;
+                var r31 = m30 * n01 + m31 * n11 + m32 * n21 + m33 * n31;
+                var r32 = m30 * n02 + m31 * n12 + m32 * n22 + m33 * n32;
+                var r33 = m30 * n03 + m31 * n13 + m32 * n23 + m33 * n33;
 
-        m00 = r00; m01 = r01; m02 = r02; m03 = r03;
-        m10 = r10; m11 = r11; m12 = r12; m13 = r13;
-        m20 = r20; m21 = r21; m22 = r22; m23 = r23;
-        m30 = r30; m31 = r31; m32 = r32; m33 = r33;
-      }
-    };
+                m00 = r00; m01 = r01; m02 = r02; m03 = r03;
+                m10 = r10; m11 = r11; m12 = r12; m13 = r13;
+                m20 = r20; m21 = r21; m22 = r22; m23 = r23;
+                m30 = r30; m31 = r31; m32 = r32; m33 = r33;
+            }
+        };
     
-    this.preApply = function preApply() {
-      apply(arguments);
-    };
+        this.preApply = function preApply() {
+            apply(arguments);
+        };
     
-    this.mult = function mult(source, target) {
-      if (source != target && (source instanceof PVector || source instanceof Array)) {
-        var x, y, z, w;
-        var tx, ty, tz;
-        if (source instanceof PVector) {
-          x = source.x;
-          y = source.y;
-          z = source.z;
-          w = 1;
-          if (!target) {
-            target = new PVector();
-          }
-        } else if (source instanceof Array) {
-          x = source[0];
-          y = source[1];
-          z = source[2];
-          w = source[3] || 1;
-          if (target.length != 3 && target.length != 4) {
-            target = new Array();
-          }
+        this.mult = function mult(source, target) {
+            if (source != target && (source instanceof PVector || source instanceof Array)) {
+                var x, y, z, w;
+                var tx, ty, tz;
+                if (source instanceof PVector) {
+                    x = source.x;
+                    y = source.y;
+                    z = source.z;
+                    w = 1;
+                    if (!target) {
+                        target = new PVector();
+                    }
+                } else if (source instanceof Array) {
+                    x = source[0];
+                    y = source[1];
+                    z = source[2];
+                    w = source[3] || 1;
+                    if (target.length != 3 && target.length != 4) {
+                        target = new Array();
+                    }
+                }
+                target[source instanceof PVector ? x : 0] = m00 * x + m01 * y + m02 * z + m03 * w;
+                target[source instanceof PVector ? y : 1] = m10 * x + m11 * y + m12 * z + m13 * w;
+                target[source instanceof PVector ? z : 2] = m20 * x + m21 * y + m22 * z + m23 * w;
+                if (target.length == 4) {
+                    target[3] = m30 * x + m31 * y + m32 * z + m33 * w;
+                }
+            }
+            return target;
+        };
+    
+        this.multX = function multX(x, y, z, w) {
+            return m00 * x + m01 * y + (z ? m02 * z : 0) + (w ? m03 * w : m03);
+        };
+    
+        this.multY = function multY(x, y, z, w) {
+            return m10 * x + m11 * y + (z ? m12 * z : 0) + (w ? m13 * w : m13);
+        };
+    
+        this.multZ = function multZ(x, y, z, w) {
+            return m20 * x + m21 * y + (z ? m22 * z : 0) + (w ? m23 * w : m23);
+        };
+    
+        this.multW = function multW(x, y, z, w) {
+            return m30 * x + m31 * y + m32 * z + (w ? m33 * w : m33);
+        };
+    
+        this.transpose = function transpose() {
+            var temp;
+            temp = m01; m01 = m10; m10 = temp;
+            temp = m02; m02 = m20; m20 = temp;
+            temp = m03; m03 = m30; m30 = temp;
+            temp = m12; m12 = m21; m21 = temp;
+            temp = m13; m13 = m31; m31 = temp;
+            temp = m23; m23 = m32; m32 = temp;
+        };
+    
+        this.invert = function invert() {
+            var determinant = determinant();
+            if (determinant == 0) {
+                return false;
+            }
+
+            // first row
+            var t00 =  determinant3x3(m11, m12, m13, m21, m22, m23, m31, m32, m33);
+            var t01 = -determinant3x3(m10, m12, m13, m20, m22, m23, m30, m32, m33);
+            var t02 =  determinant3x3(m10, m11, m13, m20, m21, m23, m30, m31, m33);
+            var t03 = -determinant3x3(m10, m11, m12, m20, m21, m22, m30, m31, m32);
+
+            // second row
+            var t10 = -determinant3x3(m01, m02, m03, m21, m22, m23, m31, m32, m33);
+            var t11 =  determinant3x3(m00, m02, m03, m20, m22, m23, m30, m32, m33);
+            var t12 = -determinant3x3(m00, m01, m03, m20, m21, m23, m30, m31, m33);
+            var t13 =  determinant3x3(m00, m01, m02, m20, m21, m22, m30, m31, m32);
+
+            // third row
+            var t20 =  determinant3x3(m01, m02, m03, m11, m12, m13, m31, m32, m33);
+            var t21 = -determinant3x3(m00, m02, m03, m10, m12, m13, m30, m32, m33);
+            var t22 =  determinant3x3(m00, m01, m03, m10, m11, m13, m30, m31, m33);
+            var t23 = -determinant3x3(m00, m01, m02, m10, m11, m12, m30, m31, m32);
+
+            // fourth row
+            var t30 = -determinant3x3(m01, m02, m03, m11, m12, m13, m21, m22, m23);
+            var t31 =  determinant3x3(m00, m02, m03, m10, m12, m13, m20, m22, m23);
+            var t32 = -determinant3x3(m00, m01, m03, m10, m11, m13, m20, m21, m23);
+            var t33 =  determinant3x3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+
+            // transpose and divide by the determinant
+            m00 = t00 / determinant;
+            m01 = t10 / determinant;
+            m02 = t20 / determinant;
+            m03 = t30 / determinant;
+
+            m10 = t01 / determinant;
+            m11 = t11 / determinant;
+            m12 = t21 / determinant;
+            m13 = t31 / determinant;
+
+            m20 = t02 / determinant;
+            m21 = t12 / determinant;
+            m22 = t22 / determinant;
+            m23 = t32 / determinant;
+
+            m30 = t03 / determinant;
+            m31 = t13 / determinant;
+            m32 = t23 / determinant;
+            m33 = t33 / determinant;
+
+            return true;
         }
-        target[source instanceof PVector ? x : 0] = m00 * x + m01 * y + m02 * z + m03 * w;
-        target[source instanceof PVector ? y : 1] = m10 * x + m11 * y + m12 * z + m13 * w;
-        target[source instanceof PVector ? z : 2] = m20 * x + m21 * y + m22 * z + m23 * w;
-        if (target.length == 4) {
-          target[3] = m30 * x + m31 * y + m32 * z + m33 * w;
+    
+        var determinant3x3 = function determinant3x3(t00, t01, t02,  t10, t11, t12,  t20, t21, t22) {
+            return (t00 * (t11 * t22 - t12 * t21) +
+                    t01 * (t12 * t20 - t10 * t22) +
+                    t02 * (t10 * t21 - t11 * t20));
         }
-      }
-      return target;
-    };
+
+        this.determinant = function determinant() {
+           var f = m00 * ((m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32)
+                           - m13 * m22 * m31
+                           - m11 * m23 * m32
+                           - m12 * m21 * m33);
+            f -= m01 * ((m10 * m22 * m33 + m12 * m23 * m30 + m13 * m20 * m32)
+                        - m13 * m22 * m30
+                        - m10 * m23 * m32
+                        - m12 * m20 * m33);
+            f += m02 * ((m10 * m21 * m33 + m11 * m23 * m30 + m13 * m20 * m31)
+                        - m13 * m21 * m30
+                        - m10 * m23 * m31
+                        - m11 * m20 * m33);
+            f -= m03 * ((m10 * m21 * m32 + m11 * m22 * m30 + m12 * m20 * m31)
+                        - m12 * m21 * m30
+                        - m10 * m22 * m31
+                        - m11 * m20 * m32);
+            return f  ;
+        }
     
-    this.multX = function multX(x, y, z, w) {
-      return m00 * x + m01 * y + (z ? m02 * z : 0) + (w ? m03 * w : m03);
-    };
+        var max = function max(a, b) {
+            return (a > b) ? a : b;
+        };
+
+        var abs = function abs(a) {
+            return (a < 0) ? -a : a;
+        };
+
+        var sin = function sin(angle) {
+            return Math.sin(angle);
+        };
+
+        var cos = function cos(angle) {
+            return Math.cos(angle);
+        };
     
-    this.multY = function multY(x, y, z, w) {
-      return m10 * x + m11 * y + (z ? m12 * z : 0) + (w ? m13 * w : m13);
     };
-    
-    this.multZ = function multZ(x, y, z, w) {
-      return m20 * x + m21 * y + (z ? m22 * z : 0) + (w ? m23 * w : m23);
-    };
-    
-    this.multW = function multW(x, y, z, w) {
-      return m30 * x + m31 * y + m32 * z + (w ? m33 * w : m33);
-    };
-    
-    this.transpose = function transpose() {
-      var temp;
-      temp = m01; m01 = m10; m10 = temp;
-      temp = m02; m02 = m20; m20 = temp;
-      temp = m03; m03 = m30; m30 = temp;
-      temp = m12; m12 = m21; m21 = temp;
-      temp = m13; m13 = m31; m31 = temp;
-      temp = m23; m23 = m32; m32 = temp;
-    };
-    
-    this.invert = function invert() {
-      var determinant = determinant();
-      if (determinant == 0) {
-        return false;
-      }
-
-      // first row
-      var t00 =  determinant3x3(m11, m12, m13, m21, m22, m23, m31, m32, m33);
-      var t01 = -determinant3x3(m10, m12, m13, m20, m22, m23, m30, m32, m33);
-      var t02 =  determinant3x3(m10, m11, m13, m20, m21, m23, m30, m31, m33);
-      var t03 = -determinant3x3(m10, m11, m12, m20, m21, m22, m30, m31, m32);
-
-      // second row
-      var t10 = -determinant3x3(m01, m02, m03, m21, m22, m23, m31, m32, m33);
-      var t11 =  determinant3x3(m00, m02, m03, m20, m22, m23, m30, m32, m33);
-      var t12 = -determinant3x3(m00, m01, m03, m20, m21, m23, m30, m31, m33);
-      var t13 =  determinant3x3(m00, m01, m02, m20, m21, m22, m30, m31, m32);
-
-      // third row
-      var t20 =  determinant3x3(m01, m02, m03, m11, m12, m13, m31, m32, m33);
-      var t21 = -determinant3x3(m00, m02, m03, m10, m12, m13, m30, m32, m33);
-      var t22 =  determinant3x3(m00, m01, m03, m10, m11, m13, m30, m31, m33);
-      var t23 = -determinant3x3(m00, m01, m02, m10, m11, m12, m30, m31, m32);
-
-      // fourth row
-      var t30 = -determinant3x3(m01, m02, m03, m11, m12, m13, m21, m22, m23);
-      var t31 =  determinant3x3(m00, m02, m03, m10, m12, m13, m20, m22, m23);
-      var t32 = -determinant3x3(m00, m01, m03, m10, m11, m13, m20, m21, m23);
-      var t33 =  determinant3x3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-
-      // transpose and divide by the determinant
-      m00 = t00 / determinant;
-      m01 = t10 / determinant;
-      m02 = t20 / determinant;
-      m03 = t30 / determinant;
-
-      m10 = t01 / determinant;
-      m11 = t11 / determinant;
-      m12 = t21 / determinant;
-      m13 = t31 / determinant;
-
-      m20 = t02 / determinant;
-      m21 = t12 / determinant;
-      m22 = t22 / determinant;
-      m23 = t32 / determinant;
-
-      m30 = t03 / determinant;
-      m31 = t13 / determinant;
-      m32 = t23 / determinant;
-      m33 = t33 / determinant;
-
-      return true;
-    }
-    
-    var determinant3x3 = function determinant3x3(t00, t01, t02,  t10, t11, t12,  t20, t21, t22) {
-      return (t00 * (t11 * t22 - t12 * t21) +
-              t01 * (t12 * t20 - t10 * t22) +
-              t02 * (t10 * t21 - t11 * t20));
-    }
-
-    this.determinant = function determinant() {
-      var f = m00 * ((m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32)
-                     - m13 * m22 * m31
-                     - m11 * m23 * m32
-                     - m12 * m21 * m33);
-      f -= m01 * ((m10 * m22 * m33 + m12 * m23 * m30 + m13 * m20 * m32)
-                  - m13 * m22 * m30
-                  - m10 * m23 * m32
-                  - m12 * m20 * m33);
-      f += m02 * ((m10 * m21 * m33 + m11 * m23 * m30 + m13 * m20 * m31)
-                  - m13 * m21 * m30
-                  - m10 * m23 * m31
-                  - m11 * m20 * m33);
-      f -= m03 * ((m10 * m21 * m32 + m11 * m22 * m30 + m12 * m20 * m31)
-                  - m12 * m21 * m30
-                  - m10 * m22 * m31
-                  - m11 * m20 * m32);
-      return f;
-    }
-    
-    var max = function max(a, b) {
-      return (a > b) ? a : b;
-    };
-
-    var abs = function abs(a) {
-      return (a < 0) ? -a : a;
-    };
-
-    var sin = function sin(angle) {
-      return Math.sin(angle);
-    };
-
-    var cos = function cos(angle) {
-      return Math.cos(angle);
-    };
-    
-  };
 
     
     ////////////////////////////////////////////////////////////////////////////
