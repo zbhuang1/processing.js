@@ -1660,6 +1660,53 @@
       apply(arguments);
     };
     
+    this.mult = function mult(source, target) {
+      if (source != target && (source instanceof PVector || source instanceof Array)) {
+        var x, y, z, w;
+        var tx, ty, tz;
+        if (source instanceof PVector) {
+          x = source.x;
+          y = source.y;
+          z = source.z;
+          w = 1;
+          if (!target) {
+            target = new PVector();
+          }
+        } else if (source instanceof Array) {
+          x = source[0];
+          y = source[1];
+          z = source[2];
+          w = source[3] || 1;
+          if (target.length != 3 && target.length != 4) {
+            target = new Array();
+          }
+        }
+        target[source instanceof PVector ? x : 0] = m00 * x + m01 * y + m02 * z + m03 * w;
+        target[source instanceof PVector ? y : 1] = m10 * x + m11 * y + m12 * z + m13 * w;
+        target[source instanceof PVector ? z : 2] = m20 * x + m21 * y + m22 * z + m23 * w;
+        if (target.length == 4) {
+          target[3] = m30 * x + m31 * y + m32 * z + m33 * w;
+        }
+      }
+      return target;
+    };
+    
+    this.multX = function multX(x, y, z, w) {
+      return m00 * x + m01 * y + (z ? m02 * z : 0) + (w ? m03 * w : m03);
+    };
+    
+    this.multY = function multY(x, y, z, w) {
+      return m10 * x + m11 * y + (z ? m12 * z : 0) + (w ? m13 * w : m13);
+    };
+    
+    this.multZ = function multZ(x, y, z, w) {
+      return m20 * x + m21 * y + (z ? m22 * z : 0) + (w ? m23 * w : m23);
+    };
+    
+    this.multW = function multW(x, y, z, w) {
+      return m30 * x + m31 * y + m32 * z + (w ? m33 * w : m33);
+    };
+    
     this.transpose = function transpose() {
       var temp;
       temp = m01; m01 = m10; m10 = temp;
@@ -1669,6 +1716,86 @@
       temp = m13; m13 = m31; m31 = temp;
       temp = m23; m23 = m32; m32 = temp;
     };
+    
+    this.invert = function invert() {
+      var determinant = determinant();
+      if (determinant == 0) {
+        return false;
+      }
+
+      // first row
+      var t00 =  determinant3x3(m11, m12, m13, m21, m22, m23, m31, m32, m33);
+      var t01 = -determinant3x3(m10, m12, m13, m20, m22, m23, m30, m32, m33);
+      var t02 =  determinant3x3(m10, m11, m13, m20, m21, m23, m30, m31, m33);
+      var t03 = -determinant3x3(m10, m11, m12, m20, m21, m22, m30, m31, m32);
+
+      // second row
+      var t10 = -determinant3x3(m01, m02, m03, m21, m22, m23, m31, m32, m33);
+      var t11 =  determinant3x3(m00, m02, m03, m20, m22, m23, m30, m32, m33);
+      var t12 = -determinant3x3(m00, m01, m03, m20, m21, m23, m30, m31, m33);
+      var t13 =  determinant3x3(m00, m01, m02, m20, m21, m22, m30, m31, m32);
+
+      // third row
+      var t20 =  determinant3x3(m01, m02, m03, m11, m12, m13, m31, m32, m33);
+      var t21 = -determinant3x3(m00, m02, m03, m10, m12, m13, m30, m32, m33);
+      var t22 =  determinant3x3(m00, m01, m03, m10, m11, m13, m30, m31, m33);
+      var t23 = -determinant3x3(m00, m01, m02, m10, m11, m12, m30, m31, m32);
+
+      // fourth row
+      var t30 = -determinant3x3(m01, m02, m03, m11, m12, m13, m21, m22, m23);
+      var t31 =  determinant3x3(m00, m02, m03, m10, m12, m13, m20, m22, m23);
+      var t32 = -determinant3x3(m00, m01, m03, m10, m11, m13, m20, m21, m23);
+      var t33 =  determinant3x3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+
+      // transpose and divide by the determinant
+      m00 = t00 / determinant;
+      m01 = t10 / determinant;
+      m02 = t20 / determinant;
+      m03 = t30 / determinant;
+
+      m10 = t01 / determinant;
+      m11 = t11 / determinant;
+      m12 = t21 / determinant;
+      m13 = t31 / determinant;
+
+      m20 = t02 / determinant;
+      m21 = t12 / determinant;
+      m22 = t22 / determinant;
+      m23 = t32 / determinant;
+
+      m30 = t03 / determinant;
+      m31 = t13 / determinant;
+      m32 = t23 / determinant;
+      m33 = t33 / determinant;
+
+      return true;
+    }
+    
+    var determinant3x3 = function determinant3x3(t00, t01, t02,  t10, t11, t12,  t20, t21, t22) {
+      return (t00 * (t11 * t22 - t12 * t21) +
+              t01 * (t12 * t20 - t10 * t22) +
+              t02 * (t10 * t21 - t11 * t20));
+    }
+
+    this.determinant = function determinant() {
+      var f = m00 * ((m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32)
+                     - m13 * m22 * m31
+                     - m11 * m23 * m32
+                     - m12 * m21 * m33);
+      f -= m01 * ((m10 * m22 * m33 + m12 * m23 * m30 + m13 * m20 * m32)
+                  - m13 * m22 * m30
+                  - m10 * m23 * m32
+                  - m12 * m20 * m33);
+      f += m02 * ((m10 * m21 * m33 + m11 * m23 * m30 + m13 * m20 * m31)
+                  - m13 * m21 * m30
+                  - m10 * m23 * m31
+                  - m11 * m20 * m33);
+      f -= m03 * ((m10 * m21 * m32 + m11 * m22 * m30 + m12 * m20 * m31)
+                  - m12 * m21 * m30
+                  - m10 * m22 * m31
+                  - m11 * m20 * m32);
+      return f;
+    }
     
     var max = function max(a, b) {
       return (a > b) ? a : b;
