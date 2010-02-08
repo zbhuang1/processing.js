@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../processing.js"></script>
+  <script src="../examples/init.js"></script>
+<link rel="stylesheet" href="../style.css"/></head>
+<body>
+<script type="application/processing">
+PFont fontA;
+
+void setup() 
+{
+  size(200, 200);
+  background(0);
+  smooth();
+  // Load the font. Fonts must be placed within the data 
+  // directory of your sketch. A font must first be created
+  // using the 'Create Font...' option in the Tools menu.
+
+  // Only draw once
+  noLoop();
+} 
+
+void draw() 
+{
+  // Draw the letter to the screen
+  fontA = loadFont("Arial");
+  textFont(fontA, 12);
+  text("www; ",5,20);
+
+  fontA = loadFont("Consolas");
+  textFont(fontA, 16);
+  text("This val)");
+
+  fontA = loadFont("Consolas");
+  textFont(fontA, 8);
+  text("Th3");
+}
+
+</script><canvas width="200" height="200"></canvas>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../processing.js"></script>
+  <script src="../examples/init.js"></script>
+<link rel="stylesheet" href="../style.css"/></head>
+<body>
+<script type="application/processing">
+size(200, 200);
+background(0);
+
+// Load the font. Fonts are located within the 
+// main Processing directory/folder and they
+// must be placed within the data directory
+// of your sketch for them to load
+PFont fontA = loadFont("Courier New");
+textFont(fontA, 36);
+textAlign(CENTER);
+
+// Set the gray value of the letters
+fill(255);
+
+// Draw the letter to the screen
+text("A");
+
+</script><canvas width="200" height="200"></canvas>
+</body>
+</html>
