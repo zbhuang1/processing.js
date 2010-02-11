@@ -2716,21 +2716,14 @@
 
     }
 
-    p.textWidth = function textWidth( str ){
-      var s=0;
-      /*for(var i=0;i<str.length;i++){
-        s+=font[str[i]].width;
-      }*/
-      text("len:"+s,0,50);
-    }
-
     // Print some text to the Canvas
     p.text = function text(){
-      if(arguments.length == 1){
+      if(arguments.length == 1){ // for text( data )
 
         p.text( arguments[0], p.LastText[0], p.LastText[1] );
 
-      }else if(arguments.length == 3){
+      }else if(arguments.length == 3){ // for text( data, x, y)
+
       // If the font is a standard Canvas font...
         if( !curTextFont.glyph ){
 
@@ -2738,25 +2731,15 @@
 
             curContext.save();
             curContext.mozTextStyle = curTextSize + "px " + curTextFont.name;
-            curContext.translate( arguments[1], arguments[2] );
+            curContext.translate( arguments[1], arguments[2] + curTextSize );
 
-            var h = document.getElementsByTagName("BODY")[0];
-            var d = document.createElement("DIV");
-            var s = document.createElement("SPAN");
-            d.appendChild(s);
-            d.style.fontFamily = "sans";
-            s.style.fontFamily = curTextFont.name;
-            s.style.fontSize   = curTextSize;
-            s.innerHTML        = arguments[0];
-            h.appendChild(d);
-            var len=s.offsetWidth;
-            d.removeChild(s);
-            h.removeChild(d);
+            var len = curContext.mozMeasureText(arguments[0]);
 
             curContext.mozDrawText(
               typeof arguments[0] == "number" ?
               String.fromCharCode( arguments[0] ) :
               arguments[0] ) ;
+
             curContext.restore();
 
             p.LastText[0] = arguments[1]+len;
@@ -2787,8 +2770,39 @@
           curContext.restore();
 
         }
+
+      }else if(arguments.length == 5){ // for text( stringdata, x, y , width, height)
+
+        if( arguments[0] != ""){
+          var spaceWidth = curContext.mozMeasureText("  ");
+          var words = arguments[0].split(" ");
+          var len;
+
+          if( curContext.mozMeasureText(words[0]) < arguments[3] ) {
+            p.text(words[0] + " ", arguments[1], arguments[2]);
+            len = curContext.mozMeasureText(words[0]) + spaceWidth;
+          }
+
+          for(var i=1;i<words.length;i++){
+            if( len + curContext.mozMeasureText(words[i]) > arguments[3] ) {
+              len = 0;
+              if(p.LastText[1] + curTextSize > arguments[2] + arguments[4]){
+                  return;
+              }
+              p.LastText[0] = arguments[1];
+              p.LastText[1] = p.LastText[1] + curTextSize;
+              //if( curContext.mozMeasureText(words[i]) > arguments[3] ) {
+              //}
+            }
+            p.text(words[i] + " ");
+            len = len + curContext.mozMeasureText(words[i]) + spaceWidth;
+          }
+
+        }
+
       }
     };
+
 
     // Load Batik SVG Fonts and parse to pre-def objects for quick rendering
     p.loadGlyphs = function loadGlyph( url ){
