@@ -16,29 +16,29 @@ void setup()
 void draw() 
 {
   // Draw the letter to the screen
-  fontA = loadFont("Arial");
+  fontA = loadFont("Ziggurat.vlw");
   textFont(fontA, 12);
   text("www; ",5,20);
 
-  fontA = loadFont("Consolas");
+  fontA = loadFont("Univers66.vlw.gz");
   textFont(fontA, 16);
   text("This val)");
 
-  fontA = loadFont("Consolas");
+  fontA = loadFont("Univers66.vlw.gz");
   textFont(fontA, 8);
   text("Th3");
 
   //-----------------------------//
 
-  fontA = loadFont("Arial");
+  fontA = loadFont("Ziggurat.vlw");
   textFont(fontA, 12);
   text("lll; ",5,50);
 
-  fontA = loadFont("Consolas");
+  fontA = loadFont("Univers66.vlw.gz");
   textFont(fontA, 16);
   text("This val)");
 
-  fontA = loadFont("Consolas");
+  fontA = loadFont("Univers66.vlw.gz");
   textFont(fontA, 8);
   text("Th3");
 }

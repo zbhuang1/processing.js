@@ -39,7 +39,7 @@ void draw()
   h=25;
   rect(5,60,10,h);
   // Draw the letter to the screen
-  text("This is test5 for text( val, xl, y1, x2, y2)", 
+  text("Thisistest5for text( val, xl, y1, x2, y2)", 
   15, 60, 100, h);
   text("This is test5 for text(val, xl, y1, x2, y2)");
 }

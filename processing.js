@@ -2786,7 +2786,7 @@
           for(var i=1;i<words.length;i++){
             if( len + curContext.mozMeasureText(words[i]) > arguments[3] ) {
               len = 0;
-              if(p.LastText[1] + curTextSize > arguments[2] + arguments[4]){
+              if(p.LastText[1] + 2*curTextSize > arguments[2] + arguments[4]){
                   return;
               }
               p.LastText[0] = arguments[1];
