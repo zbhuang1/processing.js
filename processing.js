@@ -2724,6 +2724,8 @@
 
       }else if(arguments.length == 3){ // for text( data, x, y)
 
+        var width;
+
       // If the font is a standard Canvas font...
         if( !curTextFont.glyph ){
 
@@ -2731,9 +2733,9 @@
 
             curContext.save();
             curContext.mozTextStyle = curTextSize + "px " + curTextFont.name;
-            curContext.translate( arguments[1], arguments[2] + curTextSize );
+            curContext.translate( arguments[1], arguments[2] );
 
-            var len = curContext.mozMeasureText(arguments[0]);
+            width = curContext.mozMeasureText(arguments[0]);
 
             curContext.mozDrawText(
               typeof arguments[0] == "number" ?
@@ -2742,9 +2744,6 @@
 
             curContext.restore();
 
-            p.LastText[0] = arguments[1]+len;
-            p.LastText[1] = arguments[2];
-
           }
 
         }else{
@@ -2752,7 +2751,7 @@
           // If the font is a Batik SVG font...
           var font = p.glyphTable[ curTextFont.name ];
           curContext.save();
-          curContext.translate( arguments[1], arguments[2] + curTextSize );
+          curContext.translate( arguments[1], arguments[2] );
 
           var upem      = font[ "units_per_em" ],
               newScale = 1 / upem * curTextSize;
@@ -2760,6 +2759,7 @@
           curContext.scale( newScale, newScale );
 
           var len = arguments[0].length;
+          width = curContext.mozMeasureText(arguments[0]);
 
           for(var i = 0; i < len; i++ ){
             // Test character against glyph table
@@ -2771,35 +2771,102 @@
 
         }
 
-      }else if(arguments.length == 5){ // for text( stringdata, x, y , width, height)
+        p.LastText[0] = arguments[1]+width;
+        p.LastText[1] = arguments[2];
+
+      }else if( arguments.length == 5 ){ // for text( stringdata, x, y , width, height)
 
         if( arguments[0] != ""){
+          /*
           var spaceWidth = curContext.mozMeasureText("  ");
           var words = arguments[0].split(" ");
-          var len;
+          var width = 0;
+          var textboxWidth = arguments[3]/2;
 
-          if( curContext.mozMeasureText(words[0]) < arguments[3] ) {
-            p.text(words[0] + " ", arguments[1], arguments[2]);
-            len = curContext.mozMeasureText(words[0]) + spaceWidth;
+          p.LastText[0] = arguments[1];
+          p.LastText[1] = arguments[2]+ 0.6*curTextSize;
+
+          for( var i=0; i<words.length; i++){
+
+            if( curContext.mozMeasureText( words[i] ) > textboxWidth ){
+              if(p.LastText[0] != arguments[1]){ // in case the over long word is in the middle of the text
+                width = 0;
+                if( p.LastText[1] + 2*curTextSize > arguments[2] + arguments[4] + 0.6*curTextSize ){
+                    return;
+                }
+                p.LastText[0] = arguments[1];
+                p.LastText[1] = p.LastText[1] + curTextSize;
+              }
+              for(var j=0; j < words[i].length; j++ ){
+                if( width + curContext.mozMeasureText( words[i][j] ) > textboxWidth ){
+                  width = 0;
+                  if( p.LastText[1] + 2*curTextSize > arguments[2] + arguments[4] + 0.6*curTextSize ){
+                      return;
+                  }
+                  p.LastText[0] = arguments[1];
+                  p.LastText[1] = p.LastText[1] + curTextSize;
+                }
+                text(words[i][j]);
+                width = width + curContext.mozMeasureText(words[i][j]);
+              }
+              i++;
+            }
+
+            if(words[i]){
+              if( width + curContext.mozMeasureText( words[i] ) > textboxWidth ) {
+                width = 0;
+                if( p.LastText[1] + 2*curTextSize > arguments[2] + arguments[4] + 0.6*curTextSize ){
+                    return;
+                }
+                p.LastText[0] = arguments[1];
+                p.LastText[1] = p.LastText[1] + curTextSize;
+
+              }
+
+              p.text(words[i] + " ");
+              width = width + curContext.mozMeasureText(words[i]) + spaceWidth;
+            }
           }
+          */
 
-          for(var i=1;i<words.length;i++){
-            if( len + curContext.mozMeasureText(words[i]) > arguments[3] ) {
-              len = 0;
-              if(p.LastText[1] + 2*curTextSize > arguments[2] + arguments[4]){
-                  return;
+          if( curTextSize > arguments[4] ){
+            return;
+          }
+          var spaceMark = -1;
+          var start = 0;
+          var width = 0;
+          var textboxWidth = arguments[3];
+
+          p.LastText[0] = arguments[1];
+          p.LastText[1] = arguments[2]- 0.4*curTextSize;
+          for(var i=0;i<arguments[0].length;i++){
+            if((width+=2.4*curContext.mozMeasureText(arguments[0][i]))< textboxWidth ){
+              if(arguments[0][i]==" "){
+                spaceMark = i;
+              }
+            }else{
+              if(start==spaceMark+1){
+                spaceMark=i;
               }
               p.LastText[0] = arguments[1];
               p.LastText[1] = p.LastText[1] + curTextSize;
-              //if( curContext.mozMeasureText(words[i]) > arguments[3] ) {
-              //}
+              for(;start<spaceMark+1;start++){
+                text(arguments[0][start]);
+              }
+              width = 0;
+              if( p.LastText[1] + 2*curTextSize > arguments[2] + arguments[4] + 0.6*curTextSize ){
+                return;
+              }
             }
-            p.text(words[i] + " ");
-            len = len + curContext.mozMeasureText(words[i]) + spaceWidth;
           }
-
+          if(start!=arguments[0].length){
+            p.LastText[0] = arguments[1];
+            p.LastText[1] = p.LastText[1] + curTextSize;
+            for(;start<arguments[0].length;start++){
+              text(arguments[0][start]);
+            }
+          }
         }
-
       }
     };
 
